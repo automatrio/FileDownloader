@@ -1,0 +1,24 @@
+.card-grid {
+    width: 100%;
+    display: grid;
+    @media screen and (max-width: 690px) {
+        height: 100%;
+        grid-template-columns: 1fr;
+        gap: 50px;
+        grid-template-rows: 1fr 1fr;
+        justify-items: center;
+    }
+    @media screen and (min-width: 691px){
+        grid-template-columns: 1fr 250px 1fr 250px 1fr;
+        column-gap: 1fr;
+        #button-one {
+            grid-column: 2 / 3;
+        }
+        #button-two {
+            grid-column: 4 / 5;
+        }
+    }
+    #file-input {
+        display: none;
+    }
+}

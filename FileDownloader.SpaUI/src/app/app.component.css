@@ -1,0 +1,26 @@
+.app-grid {
+    display: grid;
+    grid-template-columns: 1fr 150ox 1fr;
+    grid-template-rows: 200px 1fr 40px;
+    padding: 20px;
+    height: calc(100vh - 40px);
+}
+
+app-logo {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    z-index: 5;
+}
+
+.router-outlet-content {
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
+}
+
+.app-footer {
+    grid-column: 1 / 4;
+    grid-row: 3 / 4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

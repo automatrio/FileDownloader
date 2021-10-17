@@ -1,0 +1,18 @@
+<div class="card"
+    (mouseenter)="initializeDelta()"
+    (mouseleave)="terminateDelta()">
+    <main [routerLink]="routerLink">
+        <div class="cog-container">
+            <img
+                id="cog"
+                #cog
+                src="../../../../assets/Cog.svg">
+        </div>
+        <div class="icon-container">
+            <img id="icon" [src]="iconUrl" alt="">
+        </div>
+    </main>
+    <footer>
+        <label>{{cardTitle}}</label>
+    </footer>
+</div>

@@ -1,0 +1,17 @@
+<div class="card-grid" @fade (@fade.done)="onAnimationEnded()">
+    <app-button-card 
+        id="button-one"
+        [color]="properties.buttonOneColor"
+        [cardTitle]="properties.buttonOneLabel"
+        [iconUrl]="'../../../assets/pencil.svg'"
+        [routerLink]="properties.buttonOneRouterLink"></app-button-card>
+    <app-button-card 
+        id="button-two"
+        [color]="properties.buttonTwoColor"
+        [cardTitle]="properties.buttonTwoLabel"
+        [iconUrl]="'../../../assets/file.svg'"
+        (click)="uploadFile()"
+        ></app-button-card>
+
+    <input #fileInput id="file-input" type="file" [(ngModel)]="uploadFilePath" (change)="onFileChosen()">
+</div>

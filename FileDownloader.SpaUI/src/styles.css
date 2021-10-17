@@ -1,0 +1,127 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/cdk/overlay-prebuilt.css';
+
+:root {
+    --main-light-blue: 133, 186, 255;
+    --main-blue: 78, 144, 230;
+    --main-dark-blue: 72, 131, 208;
+    --main-darker-blue: 44, 79, 125;
+    --main-darkest-blue: 26, 47, 74;
+
+    --default-bezier: "cubic-bezier(.01,.83,.65,1.07)";
+
+    --main-green: #2bec62;
+
+
+}
+
+html, body { 
+    height: 100% !important;
+    overflow-y: hidden !important;
+    margin: 0;
+    text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5) !important;
+}
+
+@font-face {
+    font-family: 'Rajdhani';
+    src: url("./assets/Rajdhani-Medium.ttf") format("truetype");
+}
+
+html * {
+    font-family: 'Rajdhani', "Helvetica Neue", sans-serif !important;
+    color: white !important;
+}
+
+.material-icons{
+    font-family: 'Material Icons' !important;
+}
+
+html {
+    background-image: url("./assets/background.jpg");
+    background-repeat: repeat;
+}
+
+body {
+    background: linear-gradient(0deg, rgb(0, 0, 0, .4) 0%, rgba(39,86,145, .4) 60%);
+}
+
+.mat-raised-button {
+    border: 1px inset rgba(0,0,0,.1) !important;
+    box-shadow: 0px 0px 1px 1px rgba(0,0,0,.2) !important;
+    text-shadow: 0px 0px 2px white;
+    transition: 150ms;
+}
+
+.mat-raised-button:hover {
+    filter:brightness(1.15);
+}
+
+.mat-tab-link {
+    margin: 2px 2px 0px 0px;
+    height: 40px !important;
+    box-shadow: 0px 0px 3px 1px rgba(255, 255, 255, 0.15) inset !important;
+    text-shadow: 0px 0px 2px white;
+}
+
+.mat-form-field {
+    height: 100%;
+    width: 100%;
+}
+
+::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,.1);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--main-blue), .5);
+    transition: 150ms;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--main-blue));
+}
+
+::-webkit-scrollbar-corner {
+    background: none;
+}
+
+.mat-slider {
+    pointer-events: none;
+}
+
+.mat-slider-thumb {
+	background-color: rgb(39, 187, 255) !important;
+}
+
+.mat-slider-track-fill {
+    
+	background-color: rgb(0, 131, 192) !important;
+}
+
+.overlay-backdrop {
+    backdrop-filter: grayscale(1);
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mat-dialog-container {
+    background-color: rgba(105, 105, 105, 0.5);
+    backdrop-filter: blur(3px);
+    box-shadow: 0px 0px 2px 1px rgba(128,128,128,.4);
+}
+
+.mat-tree-node {
+    background: none;
+}
+
+.mat-tree {
+    background: none;
+}

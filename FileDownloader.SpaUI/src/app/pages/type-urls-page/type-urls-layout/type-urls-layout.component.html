@@ -1,0 +1,35 @@
+<section class="button-grid">
+    <button 
+        (click)="onDownloadQueried('zip')"
+        mat-raised-button 
+        color="primary" 
+        id="button-to-zip"
+        [disabled]="textArea?.invalid">
+        Download to .zip
+    </button>
+    <button 
+        (click)="openChoosePathDialog()" 
+        mat-raised-button 
+        color="primary" 
+        id="button-to-device"
+        [disabled]="textArea?.invalid">
+        Download to device
+    </button>
+</section>
+
+<section class="urls-grid">
+
+    <div id="text-area">
+        <form [formGroup]="viewModel.form!">
+            <mat-form-field appearance="outline">
+                <mat-label>Type in URLs</mat-label>
+                <textarea 
+                matInput 
+                formControlName="listOfURLs"
+                [(ngModel)]="viewModel.model!.joinedURLs"
+                placeholder="Ex. http://automatrio.com/cog.png"></textarea>
+            </mat-form-field>
+        </form>
+    </div>
+
+</section>

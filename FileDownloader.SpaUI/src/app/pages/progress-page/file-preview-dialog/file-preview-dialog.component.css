@@ -1,0 +1,14 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img {
+    width: 60vw;
+}
+
+footer {
+    display: flex;
+    justify-content: flex-end;
+}

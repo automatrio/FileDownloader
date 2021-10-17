@@ -1,0 +1,42 @@
+.file-info-table {
+    width: 100%;
+    &#headers {
+        width: calc(100% - 8px);
+    }
+    th {
+        border-bottom: 3px solid #777;
+        position: sticky;
+        top: 0px;
+    }
+    th, td{
+        height: 45px;
+        &.id-column {
+            width: 5%;
+            text-align: center;
+        }
+        &.name-column {
+            width: 50%;
+            text-align: left;
+        }
+        &.size-column {
+            width: 20%;
+            text-align: center;
+        }
+        &.status-column {
+            width: 15%;
+            text-align: center;
+        }
+        &.actions-column {
+            width: 10%;
+            text-align: center;
+        }
+    }
+    img {
+        width: 20px;
+    }
+}
+
+.table-container {
+    height: calc(100vh - 20px * 2 - 200px - 50px - 40px - 10px);
+    overflow-y: scroll;
+}

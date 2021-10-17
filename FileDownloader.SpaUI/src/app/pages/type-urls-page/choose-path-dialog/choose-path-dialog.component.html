@@ -1,0 +1,75 @@
+<div class="dialog-container">
+
+    <!-- PROGRESS BAR -->
+    <section class="progress-bar-container">
+      <mat-progress-bar 
+        *ngIf="isLoading"
+        color="warn"
+        mode="indeterminate"
+        class="example-tree-progress-bar">
+      </mat-progress-bar>
+    </section>
+
+    <section>
+        Choose a destination folder:
+    </section>
+
+    <div class="navigation-container">
+
+      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+        <!-- NODE WITHOUT CHILDREN -->
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+          <button mat-button (click)="selectDirectory(node.path)">
+            {{node.name}}
+          </button>
+        </mat-tree-node>
+
+        <!-- NODE WITH CHILDREN -->
+        <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
+          <!-- FOLDER ICON BUTTON -->
+          <button
+            mat-icon-button
+            matTreeNodeToggle>
+
+            <!-- FOLDER ICON -->
+            <mat-icon 
+            class="mat-icon-rtl-mirror" 
+            [svgIcon]="treeControl.isExpanded(node) 
+              ? 'folder_open' 
+              : 'folder'">
+            </mat-icon>
+
+          </button>
+
+          <button mat-button (click)="selectDirectory(node.path)">
+            {{node.name}}
+          </button>
+          
+
+        </mat-tree-node>
+      </mat-tree>
+
+    </div>
+
+    <footer>
+      <section>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Path</mat-label>
+          <input matInput placeholder="Ex. C:/MyFiles/" [(ngModel)]="destinationPath" name="destinationPath">
+        </mat-form-field>
+      </section>
+      <form ngForm="pathForm" (submit)="onSubmit()">
+        <section class="buttons-container">
+          <button type="button" color="primary" mat-raised-button mat-dialog-close>Close</button>
+          <button type="submit" color="accent" mat-raised-button>Confirm</button>
+        </section>
+      </form>
+      <section class="validation-container">
+        {{validationError}}
+      </section>
+  </footer>
+
+</div>
+
