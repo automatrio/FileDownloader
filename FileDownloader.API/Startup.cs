@@ -62,10 +62,13 @@ namespace FileDownloader.API
             app.UseCors();
 
             app.UseAuthorization();
-            app.UseDefaultFiles();
 
-            app.UseStaticFiles();
-
+            if (!env.IsDevelopment())
+            {
+                app.UseDefaultFiles();
+                app.UseStaticFiles();
+            }
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
