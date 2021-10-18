@@ -1,0 +1,163 @@
+@use '~@angular/material' as mat;
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+@include mat.core();
+
+$my-custom-level: mat.define-typography-config(
+  $font-family: "Rajdhani"
+);
+
+$dark-primary-text: rgba(black, 0.87);
+$dark-secondary-text: rgba(black, 0.54);
+$dark-disabled-text: rgba(black, 0.38);
+$dark-dividers: rgba(black, 0.12);
+$dark-focused: rgba(black, 0.12);
+$light-primary-text: white;
+$light-secondary-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
+
+$gray-palette: (
+    50 : #e7e7e7,
+    100 : #c4c4c4,
+    200 : #9c9c9c,
+    300 : #747474,
+    400 : #575757,
+    500 : #393939,
+    600 : #333333,
+    700 : #2c2c2c,
+    800 : #242424,
+    900 : #171717,
+    A100 : #ef7171,
+    A200 : #ea4343,
+    A400 : #fa0000,
+    A700 : #e00000,
+    contrast: (
+      50: $dark-primary-text,
+      100: $dark-primary-text,
+      200: $dark-primary-text,
+      300: $light-primary-text,
+      400: $light-primary-text,
+      500: $light-primary-text,
+      600: $light-primary-text,
+      700: $light-primary-text,
+      800: $light-primary-text,
+      900: $light-primary-text,
+      A100: $dark-primary-text,
+      A200: $light-primary-text,
+      A400: $light-primary-text,
+      A700: $light-primary-text,
+    )
+);
+
+$blue-palette: (
+  50: #e9eef2,
+  100: #c8d4df,
+  200: #a4b7ca,
+  300: #7f9ab4,
+  400: #6385a4,
+  500: #486f94,
+  600: #41678c,
+  700: #385c81,
+  800: #305277,
+  900: #214065,
+  A100: #a6ccff,
+  A200: #73afff,
+  A400: #4092ff,
+  A700: #2684ff,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $light-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $light-primary-text,
+    A400: $light-primary-text,
+    A700: $light-primary-text,
+  )
+);
+
+$yellow-palette: (
+  50: #fcf3e4,
+  100: #f6e2bb,
+  200: #f1ce8e,
+  300: #ebba60,
+  400: #e6ac3e,
+  500: #e29d1c,
+  600: #df9519,
+  700: #da8b14,
+  800: #d68111,
+  900: #cf6f09,
+  A100: #fffcf9,
+  A200: #ffe1c6,
+  A400: #ffc693,
+  A700: #ffb97a,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $dark-primary-text,
+    600: $dark-primary-text,
+    700: $dark-primary-text,
+    800: $dark-primary-text,
+    900: $dark-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  )
+);
+
+$my-accent: mat.define-palette($blue-palette, 900);
+$my-primary: mat.define-palette($gray-palette, 700);
+$my-warn: mat.define-palette($yellow-palette, 400);
+
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+   warn: $my-warn,
+ ),
+ typography: $my-custom-level
+));
+
+
+
+@include mat.all-component-themes($my-theme);
+
+
+
+// $blue-palette: (
+//   50: #e6f1ff,
+//   100: #c9ddf0,
+//   200: #aec5dc,
+//   300: #92acc7,
+//   400: #7c99b6,
+//   500: #6587a7,
+//   600: #577895,
+//   700: #47637d,
+//   800: #385067,
+//   900: #263b4e
+// );
+
+// $yellow-palette: (
+//   50: #fcfbe6,
+//   100: #f7f4c1,
+//   200: #f2ed99,
+//   300: #eee671,
+//   400: #ebe153,
+//   500: #e8dd35,
+//   600: #e7cb2f,
+//   700: #e5b426,
+//   800: #e29d1c,
+//   900: #dd7609
+// );

@@ -1,0 +1,27 @@
+<table class="file-info-table" id="headers">
+    <thead>
+        <th class="id-column">#</th>
+        <th class="name-column">Name</th>
+        <th class="size-column">Size (Kb)</th>
+        <th class="status-column">Status</th>
+        <th class="actions-column">Actions</th>
+    </thead>
+</table>
+<div class="table-container">
+    <table class="file-info-table">
+        <tbody>
+            <tr *ngFor="let fileInfo of viewModel.filterResult">
+                <td class="id-column">{{fileInfo.id}}</td>
+                <td class="name-column">{{fileInfo.fileName}}</td>
+                <td class="size-column">{{fileInfo.size}}</td>
+                <td class="status-column"><app-progress-bar [fileInfo]="fileInfo"></app-progress-bar></td>
+                <td class="actions-column">
+                    <button mat-icon-button color="accent" (click)="previewPicture(fileInfo)"><img src="../../../../assets/material_preview.svg"></button>
+                    <div *ngIf="fileInfo.status == 3">
+                        <button mat-icon-button color="accent" (click)="retry(fileInfo)"><img src="../../../../assets/material_restart.svg"></button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

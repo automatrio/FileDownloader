@@ -1,0 +1,24 @@
+.icon-tray-container {
+    display: inline-block;
+
+    a {
+        margin-left: 20px;
+        &, & > * {
+            transition: 150ms;
+        }
+        &:hover {
+            cursor: pointer;
+            filter: brightness(1.35);
+            img {
+                transform: scale(1.2);
+            }
+        } 
+        &:active {
+            filter: brightness(1.5);
+            img {
+                filter: brightness(1.25);
+                transform: scale(0.9);
+            }
+        }
+    }
+}

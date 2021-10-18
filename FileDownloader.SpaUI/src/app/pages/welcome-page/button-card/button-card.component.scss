@@ -1,0 +1,80 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 300px;
+    label {
+        font-size: xx-large;
+        margin-top: 200px;
+        text-shadow: 0px 0px 3px white;
+        transition: 300ms;
+    }
+    main:hover ~ footer > label {
+        text-shadow: 0px 0px 5px white;
+    }
+    main{
+        background-color: rgba(0,0,0,.3);
+        padding: 20px;
+        border-radius: 50%;
+        box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3);
+        transition: 400ms;
+        .icon-container {
+            position: relative;
+            width:200px;
+            opacity: 1;
+            top: -205px;
+            #icon {
+                opacity: 1;
+                transform: scale(.8);
+            }
+            &:hover {
+                filter: brightness(1.1);
+            }
+        }
+        &, img {
+            height: 200px;
+            width: 200px;
+        }
+        #cog {
+            opacity: 0.2;
+        }
+        .cog-container {
+            transition: 300ms;
+        }
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+            background-color: rgba(var(--color),.8);
+            box-shadow: 0px 0px 10px 8px rgba(var(--color), 0.3);
+            .cog-container {
+                animation: delayedgrowth 600ms cubic-bezier(.6,-4,.39, 2.5) forwards;
+            }
+            #cog {
+                animation: rotation 4s infinite linear;
+            }
+        }
+        &:active {
+            transform: scale(1.01);
+        }
+    }
+    
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(var(--initial-rotation));
+    }
+    to {
+        transform: rotate(var(--final-rotation));
+    }
+}
+
+@keyframes delayedgrowth {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.08);
+    }
+}

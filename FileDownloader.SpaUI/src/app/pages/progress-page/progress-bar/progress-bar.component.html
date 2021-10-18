@@ -1,0 +1,8 @@
+<div *ngIf="status == 1; else icon" class="slider-container">
+    <mat-slider color="accent" min="0" max="100" step="1" [value]="(fileInfo.progress | async)"></mat-slider>
+</div>
+<ng-template #icon>
+    <div *ngIf="status == 0"> Queued </div>
+    <img *ngIf="status == 2" src="../../../../assets/material_check.svg">
+    <img *ngIf="status == 3" src="../../../../assets/material_error.svg">
+</ng-template>
