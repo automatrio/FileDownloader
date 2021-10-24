@@ -9,6 +9,8 @@ import { PagesModule } from './pages/pages.module';
 import { ApiService } from './common/services/api.service';
 import { DataTransferService } from './common/services/data-transfer.service';
 import { SpinnerService } from './common/services/spinner.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpCancellationInterceptor } from './common/interceptors/http-cancellation.interceptor';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,8 @@ import { SpinnerService } from './common/services/spinner.service';
   providers: [
     ApiService,
     DataTransferService,
-    SpinnerService
+    SpinnerService,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpCancellationInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -36,7 +36,7 @@ export class DownloadProgressService {
   }
 
   public retryGetFileInfo(fileInfoUrl: string) {
-    return this.apiService.setResource("file-infos").post(fileInfoUrl);
+    return this.apiService.setResource("file-infos").setSubResource("single").post(fileInfoUrl);
   }
 
   public retryDownloadFile(fileInfo: FileInfo) {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FileDownloader.API.Models
 {
-    public struct FileInfo
+    public class FileInfo
     {
         public FileInfo(int id, string fileName, int size, string url, Uri uri, bool isValid = true)
         {

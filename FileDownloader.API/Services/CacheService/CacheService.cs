@@ -10,7 +10,7 @@ namespace FileDownloader.API.Services
     public class CacheService : ICacheService
     {
         private List<FileInfo> _currentFileInfoList { get; set; }
-        private int _cuncorrentOperations = 10;
+        private int _cuncorrentOperations = 5;
         private EFileDownloadMode _fileDownloadMode = EFileDownloadMode.ToDevice; 
         private string _destinationFolder = string.Empty;
         private string _pathToZipFile;

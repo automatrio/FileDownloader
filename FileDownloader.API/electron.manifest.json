@@ -16,6 +16,15 @@
     "directories": {
       "output": "../../../bin/Desktop"
     },
+    "win": {
+      "icon": "C:/ArquivosPessoais/FileDownloader/FileDownloader.API/wwwroot/assets/Logo_whiteOutline.png"
+      },
+    "mac": {
+      "icon": "C:/ArquivosPessoais/FileDownloader/FileDownloader.API/wwwroot/assets/Logo_whiteOutline.png"
+    },
+    "linux": {
+      "icon": "C:/ArquivosPessoais/FileDownloader/FileDownloader.API/wwwroot/assets/Logo_whiteOutline.png"
+    },
     "extraResources": [
       {
         "from": "./bin",

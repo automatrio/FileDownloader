@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FileDownloader.API.Models;
 using FileDownloader.API.Services;
@@ -25,18 +26,18 @@ namespace FileDownloader.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<DownloadResult>> InitiateDownloads()
+        public async Task<ActionResult<DownloadResult>> InitiateDownloads(CancellationToken cToken)
         {
             try
             {
                 if(_cacheService.GetFileDownloadMode() == EFileDownloadMode.ToDevice)
                 {
-                    await _fileDownloadService.DownloadAllFilesToDevice();
+                    await _fileDownloadService.DownloadAllFilesToDevice(cToken);
                     return Ok();
                 }
                 else
                 {
-                    var result = await _fileDownloadService.DownloadAllFilesToZip();
+                    var result = await _fileDownloadService.DownloadAllFilesToZip(cToken);
                     _cacheService.SetPathToZipFile(result.PathToZipFile);
                     return Ok(result);
                 }
@@ -61,13 +62,21 @@ namespace FileDownloader.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> RetryToDownloadFile([FromBody] int fileInfoId)
+        public async Task<ActionResult> RetryToDownloadFile([FromBody] int fileInfoId, CancellationToken cToken)
         {
             try
             {
                 var cachedFileInfo = _cacheService.GetFileInfoList().SingleOrDefault(_ => _.Id == fileInfoId);
-                await _fileDownloadService.DownloadSingleFiletoDevice(cachedFileInfo);
-                return Ok();
+                if(_cacheService.GetFileDownloadMode() == EFileDownloadMode.ToDevice)
+                {
+                    await _fileDownloadService.DownloadSingleFiletoDevice(cToken, cachedFileInfo);
+                    return Ok();
+                }
+                else 
+                {
+                    var result = await _fileDownloadService.DownloadSingleFileToZip(cToken, cachedFileInfo);
+                    return Ok(result);
+                }               
             }
             catch (System.Exception ex)
             {

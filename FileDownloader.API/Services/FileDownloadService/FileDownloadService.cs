@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using FileDownloader.API.Hubs;
 using FileDownloader.API.Models;
@@ -26,7 +27,7 @@ namespace FileDownloader.API.Services
             this._destinationPath = _cacheService.GetDestinationFolder();
         }
 
-        public async Task DownloadAllFilesToDevice() {
+        public async Task DownloadAllFilesToDevice(CancellationToken cToken) {
             var fileInfos = _cacheService.GetFileInfoList();
             int amountOfBundles = (int) Math.Ceiling((float) fileInfos.Count / _cacheService.GetMaxCuncorrentOperations()); 
 
@@ -36,6 +37,7 @@ namespace FileDownloader.API.Services
             {
                 for (int j = 0; j < _cacheService.GetMaxCuncorrentOperations(); j++)
                 {
+                    cToken.ThrowIfCancellationRequested();
                     int index = j + i * _cacheService.GetMaxCuncorrentOperations();
                     if(index == fileInfos.Count) break;
                     var currentFileInfo = fileInfos[index];
@@ -53,9 +55,13 @@ namespace FileDownloader.API.Services
             }
         }
 
-        public async Task DownloadSingleFiletoDevice(Models.FileInfo fileInfo)
+        public async Task DownloadSingleFiletoDevice(CancellationToken cToken, Models.FileInfo fileInfo)
         {
             await DownloadFile(fileInfo);
+        }
+
+        public async Task<DownloadResult> DownloadSingleFileToZip(CancellationToken cToken, Models.FileInfo fileInfo) {
+            return await DownloadAllFilesToZip(cToken, fileInfo);
         }
 
         private Task DownloadFile(Models.FileInfo fileInfo) {  
@@ -66,14 +72,24 @@ namespace FileDownloader.API.Services
                 var path = _destinationPath + fileInfo.FileName;
                 var uri = new Uri(fileInfo.Url);
                 client.DownloadFileAsync(uri, path);
-            }).ContinueWith(task => {
+            }).ContinueWith(async task => {
+                await NotifyClientOfProgress(fileInfo.Id, 100);
                 if(task.IsFaulted) throw task.Exception;
                 client.Dispose();
             });
         }
 
-        public async Task<DownloadResult> DownloadAllFilesToZip() {  
-            var fileInfos = _cacheService.GetFileInfoList();
+        public async Task<DownloadResult> DownloadAllFilesToZip(CancellationToken cToken, Models.FileInfo fileInfo = default(Models.FileInfo)) {  
+            var fileInfos = new List<Models.FileInfo>();
+            if(fileInfo is null)
+            {
+                fileInfos = _cacheService.GetFileInfoList();
+            }
+            else
+            {
+                fileInfos.Add(fileInfo);
+            }
+            
             var tempFolderPath = Path.GetTempPath();
             string filePath;
             var result = new DownloadResult();
@@ -82,12 +98,19 @@ namespace FileDownloader.API.Services
 
                 using(var archive = new ZipArchive(outerStream, ZipArchiveMode.Create, true)) {
 
-                    foreach(var fileInfo in fileInfos) {
-                        await DownloadFileToZipAsync(
-                            fileInfo,
-                            archive,
-                            result
-                        );
+                    foreach(var info in fileInfos) {
+                        cToken.ThrowIfCancellationRequested();
+                        if(!info.IsValid) continue;
+                        try {
+                            await DownloadFileToZipAsync(
+                                info,
+                                archive
+                            );
+                        }
+                        catch(Exception ex) {
+                            result.FailedFiles.Add(info);
+                            result.Errors.Add(ex.Message);
+                        }
                     }
                 }
 
@@ -103,7 +126,7 @@ namespace FileDownloader.API.Services
             return result;
         }
 
-        private async Task DownloadFileToZipAsync(Models.FileInfo fileInfo, ZipArchive archive, DownloadResult result) {
+        private async Task DownloadFileToZipAsync(Models.FileInfo fileInfo, ZipArchive archive) {
             using (WebClient client = new WebClient())
             {
                 client.DownloadProgressChanged += (_, args) => SendNotification(fileInfo.Id, args);

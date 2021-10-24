@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FileDownloader.API.Models;
 using FileDownloader.API.Services;
@@ -23,10 +24,10 @@ namespace FileDownloader.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<FileInfo>>> GetInfosFromJoinedURLsString(URLs dto) 
+        public async Task<ActionResult<List<FileInfo>>> GetInfosFromJoinedURLsString(URLs dto, CancellationToken cToken) 
         {
             string[] URLs = _fileInfoService.GetURLsFromString(dto.JoinedURLs);
-            var list = await _fileInfoService.GetInfosFromURLs(URLs);
+            var list = await _fileInfoService.GetInfosFromURLs(URLs, cToken);
             _cacheService.SetFileInfoList(list);
             _cacheService.SetFileDownloadMode(
                 dto.Mode == "zip"
@@ -37,10 +38,10 @@ namespace FileDownloader.API.Controllers
         }
 
         [HttpPost("single")]
-        public async Task<ActionResult<FileInfo>> GetSingleFileInfo(string url) {
+        public async Task<ActionResult<FileInfo>> GetSingleFileInfo(string url, CancellationToken cToken) {
             try 
             {
-                var fileInfo = await _fileInfoService.GetInfosFromSingleUrl(url);
+                var fileInfo = await _fileInfoService.GetInfosFromSingleUrl(url, cToken);
                 return Ok(fileInfo);
             }
             catch 

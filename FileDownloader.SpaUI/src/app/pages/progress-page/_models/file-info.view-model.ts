@@ -9,6 +9,8 @@ export class FileInfo {
     progress: BehaviorSubject<number>;
     status: eStatus;
 
+    private _previousValue: number;
+
     constructor(id: number, fileName: string, size: number, url: string) {
         this.id = id;
         this.fileName = fileName;
@@ -16,16 +18,18 @@ export class FileInfo {
         this.url = url;
         this.progress = new BehaviorSubject<number>(0);
 
-        if(fileName === "An error ocurred") {
+        if(fileName.includes("Error")) {
             this.status = 3;
             return;
         }
 
-        this.progress.subscribe((value: number) => {
+        const subscription = this.progress.subscribe((value: number) => {
+            this._previousValue = value;
+
             if(value === 0) {
                 this.status = eStatus.waiting;
             }
-            else if(value === 100) {
+            else if(value > 95) {
                 this.status = eStatus.success;
             }
             else {

@@ -84,10 +84,4 @@ export class WelcomePageLayoutComponent implements OnInit {
     });
   }
 
-  public onAnimationEnded() {
-    console.log("working")
-  }
-
-
-
 }

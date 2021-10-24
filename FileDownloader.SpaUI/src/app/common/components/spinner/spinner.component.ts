@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -6,15 +6,10 @@ import { Observable } from 'rxjs';
   templateUrl: './spinner.component.html',
   styleUrls: ['./spinner.component.scss']
 })
-export class SpinnerComponent implements OnInit {
+export class SpinnerComponent {
 
   message: string;
   message$: Observable<string>;
 
   constructor() {}
-
-  ngOnInit() {
-    this.message$.subscribe(value => console.log(value));
-  }
-
 }

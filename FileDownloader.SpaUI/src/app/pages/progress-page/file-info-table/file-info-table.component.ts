@@ -1,9 +1,8 @@
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { resolve } from 'dns';
 import { BehaviorSubject } from 'rxjs';
 import { ViewModel } from 'src/app/common/models/view-model';
 import { DataTransferService } from 'src/app/common/services/data-transfer.service';
@@ -14,7 +13,6 @@ import { FilePreviewDialogComponent } from '../file-preview-dialog/file-preview-
 import { eStatus } from '../_enums/e-status.enum';
 import { DownloadResult } from '../_models/download-result.model';
 import { FileInfo } from '../_models/file-info.view-model';
-import { ProgressInfo } from '../_models/progress-info.model';
 
 @Component({
   selector: 'app-file-info-table',
@@ -23,14 +21,6 @@ import { ProgressInfo } from '../_models/progress-info.model';
 })
 export class FileInfoTableComponent implements OnInit {
 
-  debugList = 
-  "https://c8.alamy.com/comp/PM5MR4/film-still-publicity-still-from-futurama-bender-2001-file-reference-308471061tha-for-editorial-use-only-all-rights-reserved-PM5MR4.jpg"
-  + '\n' + "https://www.syfy.com/sites/syfy/files/cast_futurama_turangaleela_0.jpg"
-  + '\n' + "https://www.syfy.com/sites/syfy/files/cast_futurama_conrad_0.jpg"
-  + '\n' + "https://www.syfy.com/sites/syfy/files/cast_futurama_zoidberg.jpg"
-  + '\n' + "https://www.syfy.com/sites/syfy/files/cast_futurama_zappbranigan.jpg"
-  + '\n' + "https://static.wikia.nocookie.net/enfuturama/images/f/fa/Cast_futurama_scruffy.jpg";
-  
   private _listOfURLs: string;
   private _baseMessage = "Fetching metadata: "
   private _uploadProgress = new BehaviorSubject<string>(this._baseMessage);
@@ -56,14 +46,14 @@ export class FileInfoTableComponent implements OnInit {
     const model = await this.getListOfURLs();
     this.filter(model).then(async () => {
       this.subscribeToDownloadProgressUpdates();
-      const result = await this.initiateDownloads();
-      this.signalRService.disconnect();
-      if(result) {
-        this.downloadZipFile();
-      }
+      this.initiateDownloads().then(results => {
+        if(results) {
+          this.changeStatusForAllFinishedDownloads(results);
+          this.downloadZipFile();
+          this.signalRService.disconnect();
+        }
+      });
     });
-    
-
   }
 
   public previewPicture(fileInfo: FileInfo) {
@@ -103,18 +93,23 @@ export class FileInfoTableComponent implements OnInit {
   }
 
   private downloadZipFile() {
+    console.log("initiating zip download");
+    this._baseMessage
+    this.spinnerService.toggleLoading("Fetching .zip file...");
     this.progressService
       .downloadZipFile()
       .subscribe(response => {
+        this.spinnerService.hideSpinner();
         const downloadedFile = new Blob([(response as HttpResponse<Blob>).body!], {type: "application/zip"});
         const url = URL.createObjectURL(downloadedFile);
-        window.open(url, '_blank');
+        window.location.assign(url);
       });
+    
   }
 
   private getFileInfo(fileInfo: FileInfo) {
     return new Promise<FileInfo>(resolve => {
-      console.log(fileInfo);
+
       fileInfo.status = 1;
       this.progressService
         .retryGetFileInfo(fileInfo.url)
@@ -130,7 +125,11 @@ export class FileInfoTableComponent implements OnInit {
   }
 
   private retryToDownloadFile(fileInfo: FileInfo) {
-    this.progressService.retryDownloadFile(fileInfo).subscribe();
+    this.progressService.retryDownloadFile(fileInfo).subscribe(result => {
+      if(result) {
+        this.changeStatusForAllFinishedDownloads(result as DownloadResult);
+      }
+    });
   }
 
 
@@ -165,7 +164,7 @@ export class FileInfoTableComponent implements OnInit {
       this._listOfURLs = this.dataTransferService.getDataAcrossRouting("URLs");
       const mode = this.dataTransferService.getDataAcrossRouting("mode");
       const model = {
-        joinedURLs: this._listOfURLs ?? this.debugList,
+        joinedURLs: this._listOfURLs ?? "",
         mode: mode
       };
       resolve(model);
@@ -182,6 +181,19 @@ export class FileInfoTableComponent implements OnInit {
   private subscribeToFileInfoProgressUpdates() {
     this.signalRService.fileInfoProgressInfo.subscribe(update => {
       this._uploadProgress.next(this._baseMessage + update.percentage + "%")
+    });
+  }
+
+  private changeStatusForAllFinishedDownloads(result: DownloadResult) {
+    if(!result) return;
+    if(!result.failedFiles) return;
+    const failedFilesIds = result.failedFiles.map(fileInfo => fileInfo.id);
+    this.viewModel.filterResult.forEach(file => {
+      if(failedFilesIds.includes(file.id)) {
+        file.status = eStatus.error;
+      } else {
+        file.status = eStatus.success;
+      }
     });
   }
 }
